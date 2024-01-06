@@ -1,9 +1,23 @@
+import { SetStateAction, useRef, useState } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+import {
+  MD3LightTheme as DefaultTheme,
+  PaperProvider,
+} from 'react-native-paper';
+import { ShaveDataProvider } from '../contexts/ShaveDataContext';
+import {
+  defineNotificationCategories,
+  getScheduledNotificationsAsync,
+  requestPermissionsAsync,
+  scheduleNotificationAndGetID,
+} from '../services/notificationService';
+
+import * as Notifications from 'expo-notifications';
+import NotificationHandler from '../components/NotificationHandler';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -18,7 +32,19 @@ export const unstable_settings = {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
 export default function RootLayout() {
+  const notificationListener = useRef<Notifications.Subscription>();
+  const [notification, setNotification] = useState<any>();
+
+  const [pushAllowed, setPushAllowed] = useState(false);
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
@@ -35,6 +61,47 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
+  useEffect(() => {
+    const requestNotificationsPerms = async () => {
+      await requestPermissionsAsync().then((result) => {
+        setPushAllowed(result);
+      });
+    };
+
+    requestNotificationsPerms().then(() => {
+      notificationListener.current =
+        Notifications.addNotificationReceivedListener((notification) =>
+          setNotification(notification)
+        );
+    });
+
+    return () => {
+      if (notificationListener.current) {
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        );
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!pushAllowed) return;
+
+    const setupNotifications = async () => {
+      await defineNotificationCategories();
+
+      const scheduledNotifications = await getScheduledNotificationsAsync();
+
+      if (scheduledNotifications.length > 0) {
+        return;
+      }
+
+      await scheduleNotificationAndGetID();
+    };
+
+    setupNotifications();
+  }, [pushAllowed]);
+
   if (!loaded) {
     return null;
   }
@@ -42,15 +109,24 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: 'tomato',
+    accent: 'yellow',
+  },
+};
 
+function RootLayoutNav() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <PaperProvider theme={theme}>
+      <ShaveDataProvider>
+        <NotificationHandler />
+        <Stack>
+          <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+        </Stack>
+      </ShaveDataProvider>
+    </PaperProvider>
   );
 }

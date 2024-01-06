@@ -1,14 +1,35 @@
 import { StyleSheet } from 'react-native';
 
-import EditScreenInfo from '../../components/EditScreenInfo';
 import { Text, View } from '../../components/Themed';
+import HomeScreenInfo from '../../components/HomeScreenInfo';
+import { useShaveData } from '../../contexts/ShaveDataContext';
 
-export default function TabOneScreen() {
+export default function HomeScreen() {
+  const { state: shaveData, updateShaveCount, resetShaveData } = useShaveData();
+
+  const handleIncrementShaveCount = async () => {
+    const newShaveCount = shaveData.shaveCount + 1;
+    updateShaveCount(newShaveCount);
+  };
+
+  const handleResetShaveData = async () => {
+    resetShaveData();
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+      <Text style={styles.title}>Blade Buddy</Text>
+      <View
+        style={styles.separator}
+        lightColor='#eee'
+        darkColor='rgba(255,255,255,0.1)'
+      />
+      <HomeScreenInfo
+        resetShaveData={handleResetShaveData}
+        incrementShaveCount={handleIncrementShaveCount}
+        loading={shaveData.loading}
+        shaveData={shaveData}
+      />
     </View>
   );
 }

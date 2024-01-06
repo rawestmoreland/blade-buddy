@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "shaver-router",
-    "slug": "shaver-router",
+    "name": "blade-buddy",
+    "slug": "bladebuddy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -16,13 +16,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.westmorelandcreative.bladebuddy"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.westmorelandcreative.bladebuddy"
     },
     "web": {
       "bundler": "metro",
@@ -34,6 +36,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "2a77fa98-4df6-4de3-86f5-6e3e50e2c619"
+      }
+    },
+    "owner": "rawestmoreland"
   }
 }
