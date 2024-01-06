@@ -1,0 +1,83 @@
+body {
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+header {
+  background: #007bff;
+  color: #fff;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+header .logo {
+  height: 50px;
+}
+
+header ul {
+  padding: 0;
+  list-style: none;
+}
+
+header ul li {
+  display: inline;
+  margin: 0 20px;
+}
+
+header ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+#hero {
+  background: #f4f4f4;
+  padding: 2rem;
+  text-align: center;
+}
+
+.download-button {
+  display: inline-block;
+  background: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+#features {
+  background: #fff;
+  padding: 2rem;
+}
+
+.feature-item {
+  margin-bottom: 1rem;
+}
+
+.feature-item img {
+  width: 100%;
+  max-width: 300px;
+}
+
+#download {
+  background: #f4f4f4;
+  padding: 2rem;
+  text-align: center;
+}
+
+.app-store-button,
+.google-play-button {
+  display: inline-block;
+  margin: 10px;
+  /* Add specific styles for buttons */
+}
+
+footer {
+  background: #007bff;
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0;
+}
