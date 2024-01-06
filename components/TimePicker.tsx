@@ -3,7 +3,7 @@ import { useState } from 'react';
 import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
-import { Platform, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import formatTime from '../lib/functions.js/formatTime';
 
@@ -19,7 +19,7 @@ export default function TimePicker({
   const initialDate = new Date();
   initialDate.setHours(storedHour, storedMinute, 0, 0);
 
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(Platform.OS === 'ios');
   const [date, setDate] = useState(initialDate);
 
   const handleChange = async (
@@ -35,13 +35,25 @@ export default function TimePicker({
 
     await updateNotificationTime(hour, minute);
 
-    setShow(false);
-    setShow(true);
+    if (Platform.OS === 'ios') {
+      setShow(false);
+      setShow(true);
+    } else {
+      setShow(false);
+    }
   };
 
   return (
     <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-      <Text>Scheduled for:</Text>
+      {Platform.OS === 'ios' && <Text>Scheduled for:</Text>}
+      {Platform.OS === 'android' && (
+        <View style={style.row}>
+          <Text>Scheduled for: </Text>
+          <Button onPress={() => setShow(true)}>
+            {formatTime(date.getHours(), date.getMinutes())}
+          </Button>
+        </View>
+      )}
       {show && (
         <DateTimePicker
           testID='dateTimePicker'
@@ -55,3 +67,11 @@ export default function TimePicker({
     </View>
   );
 }
+
+const style = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
