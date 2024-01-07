@@ -1,7 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
 import { Pressable, useColorScheme } from 'react-native';
-import { BottomNavigation } from 'react-native-paper';
+import { BottomNavigation, Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -28,12 +28,24 @@ export default function TabLayout() {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        headerShown: false,
       }}
       tabBar={({ navigation, state, descriptors, insets }) => (
         <BottomNavigation.Bar
+          activeColor={Colors.brand.darkBlue}
+          inactiveColor={Colors.brand.lightBlue}
+          theme={{
+            colors: {
+              secondaryContainer: Colors.brand.lightBlue,
+            },
+          }}
           navigationState={state}
           safeAreaInsets={insets}
+          style={{
+            backgroundColor: Colors.brand.darkBlue,
+            borderTopColor: Colors.brand.lightBlue,
+            borderTopWidth: 1,
+          }}
           onTabPress={({ route, preventDefault }) => {
             const event = navigation.emit({
               type: 'tabPress',
@@ -53,10 +65,24 @@ export default function TabLayout() {
           renderIcon={({ route, focused, color }) => {
             const { options } = descriptors[route.key];
             if (options.tabBarIcon) {
-              return options.tabBarIcon({ focused, color, size: 24 });
+              return options.tabBarIcon({
+                focused,
+                color,
+                size: 24,
+              });
             }
 
             return null;
+          }}
+          renderLabel={({ route, focused, color }) => {
+            return (
+              <Text
+                variant='bodySmall'
+                style={{ color: Colors.brand.lightBlue, textAlign: 'center' }}
+              >
+                {route.name}
+              </Text>
+            );
           }}
           getLabelText={({ route }) => {
             const { options } = descriptors[route.key];

@@ -2,15 +2,16 @@ import { StyleSheet } from 'react-native';
 
 import SettingsScreenInfo from '../../components/SettingsScreenInfo';
 import { Text, View } from '../../components/Themed';
+import Colors from '../../constants/Colors';
 
 export default function SettingsScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Settings</Text>
+      <Text style={[styles.title, styles.text]}>Settings</Text>
       <View
         style={styles.separator}
-        lightColor='#eee'
-        darkColor='rgba(255,255,255,0.1)'
+        lightColor={Colors.brand.lightBlue}
+        darkColor={Colors.brand.darkBlue}
       />
       <SettingsScreenInfo />
     </View>
@@ -22,6 +23,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: Colors.brand.darkBlue,
   },
   title: {
     fontSize: 20,
@@ -31,5 +33,8 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: '80%',
+  },
+  text: {
+    color: Colors.brand.lightBlue,
   },
 });

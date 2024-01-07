@@ -6,6 +6,7 @@ import DateTimePicker, {
 import { Platform, StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import formatTime from '../lib/functions.js/formatTime';
+import Colors from '../constants/Colors';
 
 export default function TimePicker({
   storedHour,
@@ -45,11 +46,17 @@ export default function TimePicker({
 
   return (
     <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-      {Platform.OS === 'ios' && <Text>Scheduled for:</Text>}
+      {Platform.OS === 'ios' && <Text style={styles.text}>Scheduled for:</Text>}
       {Platform.OS === 'android' && (
-        <View style={style.row}>
-          <Text>Scheduled for: </Text>
-          <Button onPress={() => setShow(true)}>
+        <View style={styles.row}>
+          <Text variant='bodyLarge' style={styles.text}>
+            Scheduled for:{' '}
+          </Text>
+          <Button
+            buttonColor={Colors.brand.lightBlue}
+            textColor={Colors.brand.darkBlue}
+            onPress={() => setShow(true)}
+          >
             {formatTime(date.getHours(), date.getMinutes())}
           </Button>
         </View>
@@ -57,6 +64,7 @@ export default function TimePicker({
       {show && (
         <DateTimePicker
           testID='dateTimePicker'
+          style={styles.picker}
           value={date}
           mode='time'
           is24Hour={false}
@@ -68,10 +76,17 @@ export default function TimePicker({
   );
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  text: {
+    color: Colors.brand.lightBlue,
+  },
+  picker: {
+    backgroundColor: Colors.brand.lightBlue,
+    marginLeft: 8,
   },
 });
