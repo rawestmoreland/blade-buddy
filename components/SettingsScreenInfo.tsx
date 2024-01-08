@@ -35,7 +35,7 @@ export default function SettingsScreenInfo() {
           value={shaveData.shaveLimit}
           step={1}
           minimumValue={1}
-          maximumValue={10}
+          maximumValue={20}
           maximumTrackTintColor='#e8ebe9'
           minimumTrackTintColor={Colors.brand.lightBlue}
           onValueChange={async (value) => {
