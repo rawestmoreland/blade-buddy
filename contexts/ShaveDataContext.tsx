@@ -25,11 +25,11 @@ export interface ShaveDataState {
 const ShaveDataContext = createContext<{
   state: ShaveDataState;
   updateShaveCount: (count: number) => Promise<void>;
-  updateLastShaveDate: (date: string | null) => void;
-  updateShaveLimit: (limit: number) => void;
+  updateLastShaveDate: (date: string | null) => Promise<void>;
+  updateShaveLimit: (limit: number) => Promise<void>;
   updateNotifications: (value: boolean) => Promise<void>;
   updateNotificationTime: (hour: number, minute: number) => Promise<void>;
-  resetShaveData: () => void;
+  resetShaveData: () => Promise<void>;
   setLoading: (loading: boolean) => void;
 }>({
   state: {
@@ -41,12 +41,12 @@ const ShaveDataContext = createContext<{
     notificationTime: { hour: 9, minute: 0 },
   },
   updateShaveCount: (count: number) => new Promise(() => {}),
-  updateLastShaveDate: () => {},
-  updateShaveLimit: () => {},
+  updateLastShaveDate: () => new Promise(() => {}),
+  updateShaveLimit: () => new Promise(() => {}),
   updateNotifications: (value: boolean) => new Promise(() => {}),
   updateNotificationTime: (hour: number, minute: number) =>
     new Promise(() => {}),
-  resetShaveData: () => {},
+  resetShaveData: () => new Promise(() => {}),
   setLoading: () => {},
 });
 
@@ -84,16 +84,16 @@ export const ShaveDataProvider = ({ children }: { children: ReactNode }) => {
     await AsyncStorage.setItem('shaveData', JSON.stringify(newState));
   };
 
-  const updateLastShaveDate = (date: string | null) => {
+  const updateLastShaveDate = async (date: string | null) => {
     const newState = { ...state, lastShaveDate: date };
     setState(newState);
-    AsyncStorage.setItem('shaveData', JSON.stringify(newState));
+    await AsyncStorage.setItem('shaveData', JSON.stringify(newState));
   };
 
-  const updateShaveLimit = (limit: number) => {
+  const updateShaveLimit = async (limit: number) => {
     const newState = { ...state, shaveLimit: limit };
     setState(newState);
-    AsyncStorage.setItem('shaveData', JSON.stringify(newState));
+    await AsyncStorage.setItem('shaveData', JSON.stringify(newState));
   };
 
   const updateNotifications = async (value: boolean) => {
@@ -121,10 +121,10 @@ export const ShaveDataProvider = ({ children }: { children: ReactNode }) => {
     await AsyncStorage.setItem('shaveData', JSON.stringify(newState));
   };
 
-  const resetShaveData = () => {
+  const resetShaveData = async () => {
     const newState = { ...state, shaveCount: 0, lastShaveDate: null };
     setState(newState);
-    AsyncStorage.setItem('shaveData', JSON.stringify(newState));
+    await AsyncStorage.setItem('shaveData', JSON.stringify(newState));
   };
 
   const setLoading = (loading: boolean) => {

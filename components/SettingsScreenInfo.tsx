@@ -8,6 +8,7 @@ import Slider from '@react-native-community/slider';
 import { useShaveData } from '../contexts/ShaveDataContext';
 import TimePicker from './TimePicker';
 import formatTime from '../lib/functions.js/formatTime';
+import Colors from '../constants/Colors';
 
 export default function SettingsScreenInfo() {
   const {
@@ -20,8 +21,15 @@ export default function SettingsScreenInfo() {
   return (
     <View style={pageStyle.container}>
       <View style={pageStyle.detailsContainer}>
-        <Text variant='labelLarge'>Max Shaves</Text>
-        <Text variant='bodyLarge'>{shaveData.shaveLimit}</Text>
+        <Text variant='titleLarge' style={pageStyle.text}>
+          Max Shaves
+        </Text>
+        <Text
+          style={[pageStyle.text, { fontWeight: 'bold' }]}
+          variant='headlineMedium'
+        >
+          {shaveData.shaveLimit}
+        </Text>
         <Slider
           style={{ width: 200, height: 40 }}
           value={shaveData.shaveLimit}
@@ -29,15 +37,18 @@ export default function SettingsScreenInfo() {
           minimumValue={1}
           maximumValue={10}
           maximumTrackTintColor='#e8ebe9'
-          minimumTrackTintColor='#575757'
+          minimumTrackTintColor={Colors.brand.lightBlue}
           onValueChange={async (value) => {
             updateShaveLimit(value);
           }}
         />
       </View>
       <View style={pageStyle.detailsContainer}>
-        <Text variant='labelLarge'>Daily push notifications</Text>
+        <Text style={pageStyle.text} variant='titleLarge'>
+          Daily push notifications
+        </Text>
         <Switch
+          color={Colors.brand.lightBlue}
           value={shaveData.notificationsEnabled}
           onValueChange={updateNotifications}
         />
@@ -72,5 +83,8 @@ const pageStyle = StyleSheet.create({
   warningText: {
     color: 'red',
     fontWeight: '700',
+  },
+  text: {
+    color: Colors.brand.lightBlue,
   },
 });

@@ -1,8 +1,20 @@
 import * as Notifications from 'expo-notifications';
 
 export async function requestPermissionsAsync(): Promise<boolean> {
-  const { status } = await Notifications.requestPermissionsAsync();
-  if (status !== 'granted') {
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+  if (finalStatus !== 'granted') {
+    const { status } = await Notifications.requestPermissionsAsync({
+      ios: {
+        allowAlert: true,
+        allowBadge: true,
+        allowSound: true,
+        allowAnnouncements: true,
+      },
+    });
+    finalStatus = status;
+  }
+  if (finalStatus !== 'granted') {
     alert('Allow Blade Buddy to send notifications?');
     return false;
   }

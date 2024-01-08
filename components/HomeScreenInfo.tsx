@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
-import { TShaveData } from '../types/shaveData';
+import { Button, IconButton, ProgressBar, Text } from 'react-native-paper';
 import { ShaveDataState } from '../contexts/ShaveDataContext';
+import Colors from '../constants/Colors';
 
 export default function HomeScreenInfo({
   loading,
@@ -17,32 +17,53 @@ export default function HomeScreenInfo({
   return (
     <View style={pageStyle.container}>
       <View style={pageStyle.container}>
-        <View style={pageStyle.detailsContainer}>
-          <Text variant='bodyMedium'>
-            Last Shaved:{' '}
-            {shaveData?.lastShaveDate ? shaveData?.lastShaveDate : 'Never'}
+        <Text variant='titleLarge' style={pageStyle.text}>
+          {shaveData?.shaveCount ?? 0} / {shaveData?.shaveLimit ?? 0} Shaves
+        </Text>
+        <ProgressBar
+          aria-labelledby='shave-progress-text'
+          progress={(shaveData?.shaveCount ?? 0) / (shaveData?.shaveLimit ?? 0)}
+          color={Colors.brand.lightBlue}
+          style={{
+            backgroundColor: 'white',
+            height: 10,
+            width: 200,
+            borderRadius: 8,
+            marginBottom: 16,
+          }}
+        />
+        {(shaveData?.shaveCount ?? 0) >= (shaveData?.shaveLimit ?? 0) && (
+          <Text
+            id='shave-progress-text'
+            style={pageStyle.warningText}
+            variant='labelLarge'
+          >
+            You've reached your limit!
           </Text>
-          <Text variant='bodyMedium'>
-            Shave Count: {shaveData?.shaveCount ?? 'N/A'}
+        )}
+        <View>
+          <IconButton
+            aria-labelledby='shaved-button-text'
+            icon='plus'
+            containerColor={Colors.brand.lightBlue}
+            iconColor={Colors.brand.darkBlue}
+            disabled={loading}
+            mode='contained'
+            onPress={incrementShaveCount}
+          />
+          <Text
+            id='shaved-button-text'
+            style={pageStyle.text}
+            variant='labelMedium'
+          >
+            I Shaved
           </Text>
-          {(shaveData?.shaveLimit ?? 0) <= (shaveData?.shaveCount ?? 0) ? (
-            <Text style={pageStyle.warningText} variant='bodyLarge'>
-              Time to change your blade!
-            </Text>
-          ) : (
-            <Text variant='bodyMedium'>
-              Change your blade at: {shaveData?.shaveLimit ?? 'N/A'} shaves
-            </Text>
-          )}
         </View>
         <Button
+          textColor={Colors.brand.lightBlue}
           disabled={loading}
-          mode='contained'
-          onPress={incrementShaveCount}
+          onPress={resetShaveData}
         >
-          Increment Shave
-        </Button>
-        <Button disabled={loading} onPress={resetShaveData}>
           Reset
         </Button>
       </View>
@@ -52,12 +73,16 @@ export default function HomeScreenInfo({
 
 const pageStyle = StyleSheet.create({
   container: {
-    gap: 40,
+    gap: 16,
     alignItems: 'center',
+    marginTop: -16,
+  },
+  text: {
+    color: Colors.brand.lightBlue,
   },
   detailsContainer: {
-    gap: 4,
-    alignItems: 'center',
+    gap: 16,
+    alignItems: 'flex-start',
   },
   row: {
     flexDirection: 'row',
@@ -66,5 +91,8 @@ const pageStyle = StyleSheet.create({
   warningText: {
     color: 'red',
     fontWeight: '700',
+  },
+  buttonStyle: {
+    backgroundColor: Colors.brand.lightBlue,
   },
 });

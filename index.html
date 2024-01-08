@@ -7,9 +7,9 @@
     <link href="output.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
   </head>
-  <body class="font-sans bg-gray-100">
+  <body class="relative font-sans bg-gray-100">
     <!-- Header -->
-    <header class="bg-blue-500 text-white p-4">
+    <header class="bg-lightBlue text-darkBlue p-4 sticky top-0 left-0">
       <div class="container mx-auto flex justify-between items-center">
         <h1 class="text-xl font-bold">Blade Buddy</h1>
         <nav>
@@ -25,15 +25,25 @@
     </header>
 
     <!-- Hero Section -->
-    <section id="hero" class="text-center py-12 bg-white">
+    <section id="hero" class="text-center py-12 bg-white text-darkBlue">
       <div class="container mx-auto">
         <h2 class="text-3xl font-bold mb-4">Welcome to Blade Buddy</h2>
-        <p class="mb-8 text-xl font-semibold">Never a dull moment</p>
+        <p class="text-xl font-semibold">Never a dull moment</p>
+      </div>
+    </section>
+
+    <section class="bg-white w-full pb-12">
+      <div class="container mx-auto flex items-center w-full justify-center">
+        <div
+          class="waitlisty-widget border-2 border-darkBlue rounded-xl max-w-lg shadow-[6px_6px_0_0_#061627] mx-8 p-2"
+          data-key-id="6dMkbz_"
+          data-height="140px"
+        ></div>
       </div>
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="py-12">
+    <section id="features" class="pb-12 bg-white">
       <div class="container mx-auto">
         <div class="flex flex-wrap justify-center space-x-4">
           <!-- Repeat this block for each feature -->
@@ -66,8 +76,12 @@
     -->
 
     <!-- Footer -->
-    <footer class="bg-blue-500 text-white p-4 text-center">
+    <footer class="bg-lightBlue text-darkBlue p-4 text-center">
       <p>© 2024 Westmoreland Creative LLC. All rights reserved.</p>
     </footer>
+    <script
+      src="https://jzcjrtlxrpzxgszlwttl.supabase.co/storage/v1/object/public/scripts/waitlisty-widget.js"
+      defer
+    ></script>
   </body>
 </html>
