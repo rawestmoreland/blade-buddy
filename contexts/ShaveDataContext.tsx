@@ -8,7 +8,8 @@ import React, {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   cancelAllScheduledNotificationsAsync,
-  scheduleNotificationWithCategory,
+  requestPermissionsAsync,
+  scheduleNotification,
 } from '../services/notificationService';
 
 // Define the shape of our state
@@ -31,6 +32,8 @@ const ShaveDataContext = createContext<{
   updateNotificationTime: (hour: number, minute: number) => Promise<void>;
   resetShaveData: () => Promise<void>;
   setLoading: (loading: boolean) => void;
+  showPermissionDialog: boolean;
+  setShowPermissionDialog: (value: boolean) => void;
 }>({
   state: {
     shaveCount: 0,
@@ -48,6 +51,8 @@ const ShaveDataContext = createContext<{
     new Promise(() => {}),
   resetShaveData: () => new Promise(() => {}),
   setLoading: () => {},
+  showPermissionDialog: false,
+  setShowPermissionDialog: () => {},
 });
 
 // Provider component
@@ -60,6 +65,9 @@ export const ShaveDataProvider = ({ children }: { children: ReactNode }) => {
     notificationsEnabled: true,
     notificationTime: { hour: 9, minute: 0 },
   });
+
+  const [showPermissionDialog, setShowPermissionDialog] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const loadShaveData = async () => {
@@ -101,6 +109,17 @@ export const ShaveDataProvider = ({ children }: { children: ReactNode }) => {
 
     if (value === false) {
       await cancelAllScheduledNotificationsAsync();
+    } else {
+      const canNotify: boolean = await requestPermissionsAsync();
+
+      if (canNotify) {
+        await scheduleNotification(
+          state.notificationTime.hour,
+          state.notificationTime.minute
+        );
+      } else {
+        setShowPermissionDialog(true);
+      }
     }
 
     setState(newState);
@@ -116,7 +135,7 @@ export const ShaveDataProvider = ({ children }: { children: ReactNode }) => {
 
     await cancelAllScheduledNotificationsAsync();
 
-    await scheduleNotificationWithCategory(hour, minute);
+    await scheduleNotification(hour, minute);
 
     await AsyncStorage.setItem('shaveData', JSON.stringify(newState));
   };
@@ -142,6 +161,8 @@ export const ShaveDataProvider = ({ children }: { children: ReactNode }) => {
         updateNotificationTime,
         resetShaveData,
         setLoading,
+        showPermissionDialog,
+        setShowPermissionDialog,
       }}
     >
       {children}

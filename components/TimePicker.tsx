@@ -37,7 +37,6 @@ export default function TimePicker({
     await updateNotificationTime(hour, minute);
 
     if (Platform.OS === 'ios') {
-      setShow(false);
       setShow(true);
     } else {
       setShow(false);
@@ -64,7 +63,6 @@ export default function TimePicker({
       {show && (
         <DateTimePicker
           testID='dateTimePicker'
-          style={styles.picker}
           value={date}
           mode='time'
           is24Hour={false}

@@ -1,13 +1,19 @@
 import { useState } from 'react';
 
-import { StyleSheet, View } from 'react-native';
-import { Text, SegmentedButtons, Switch } from 'react-native-paper';
+import { Linking, StyleSheet, View } from 'react-native';
+import {
+  Text,
+  SegmentedButtons,
+  Switch,
+  Portal,
+  Dialog,
+  Button,
+} from 'react-native-paper';
 
 import Slider from '@react-native-community/slider';
 
 import { useShaveData } from '../contexts/ShaveDataContext';
 import TimePicker from './TimePicker';
-import formatTime from '../lib/functions.js/formatTime';
 import Colors from '../constants/Colors';
 
 export default function SettingsScreenInfo() {
@@ -16,7 +22,14 @@ export default function SettingsScreenInfo() {
     updateShaveLimit,
     updateNotifications,
     updateNotificationTime,
+    showPermissionDialog,
+    setShowPermissionDialog,
   } = useShaveData();
+
+  const openDeviceSettings = () => {
+    Linking.openSettings();
+    setShowPermissionDialog(false);
+  };
 
   return (
     <View style={pageStyle.container}>
@@ -62,6 +75,26 @@ export default function SettingsScreenInfo() {
           />
         </View>
       )}
+      <Portal>
+        <Dialog
+          visible={showPermissionDialog}
+          onDismiss={() => setShowPermissionDialog(false)}
+        >
+          <Dialog.Title>Notifications are not enabled.</Dialog.Title>
+          <Dialog.Content>
+            <Text variant='bodyMedium'>
+              You must enable notifications in your phone's settings to receive
+              daily reminders.
+            </Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setShowPermissionDialog(false)}>
+              Cancel
+            </Button>
+            <Button onPress={openDeviceSettings}>Settings</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </View>
   );
 }

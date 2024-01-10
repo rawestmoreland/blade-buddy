@@ -15,7 +15,6 @@ export async function requestPermissionsAsync(): Promise<boolean> {
     finalStatus = status;
   }
   if (finalStatus !== 'granted') {
-    alert('Allow Blade Buddy to send notifications?');
     return false;
   }
   return true;
@@ -44,7 +43,6 @@ export async function scheduleNotificationWithCategory(
     content: {
       title: "Hey! It's Blade Buddy!",
       body: 'Did you shave today? Tap Yes or No below.',
-      categoryIdentifier: 'shaveQuery',
     },
     trigger: { hour, minute, repeats: true },
   });
@@ -52,8 +50,23 @@ export async function scheduleNotificationWithCategory(
   return notificationId;
 }
 
+export const scheduleNotification = async (
+  hour: number = 9,
+  minute: number = 0
+) => {
+  const notificationId = await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "Hey! It's Blade Buddy!",
+      body: 'Did you shave today? Tap Yes or No below.',
+    },
+    trigger: { hour, minute, repeats: true },
+  });
+
+  return notificationId;
+};
+
 export async function scheduleNotificationAndGetID() {
-  const notificationId = await scheduleNotificationWithCategory();
+  const notificationId = await scheduleNotification();
 
   return notificationId;
 }
