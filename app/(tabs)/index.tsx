@@ -19,7 +19,10 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Image source={require('../../assets/images/LogoDark.png')} />
+      <Image
+        style={{ height: 200, width: 200, marginBottom: 16 }}
+        source={require('../../assets/images/LogoDarkSmiley.png')}
+      />
       <HomeScreenInfo
         resetShaveData={handleResetShaveData}
         incrementShaveCount={handleIncrementShaveCount}
