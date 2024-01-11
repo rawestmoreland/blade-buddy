@@ -2,9 +2,9 @@
   "expo": {
     "name": "Blade Buddy",
     "slug": "bladebuddy",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "orientation": "portrait",
-    "icon": "./assets/images/LogoDark.png",
+    "icon": "./assets/images/3_SVG.svg",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
