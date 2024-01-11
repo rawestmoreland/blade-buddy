@@ -65,6 +65,7 @@ export default function TimePicker({
           testID='dateTimePicker'
           value={date}
           mode='time'
+          themeVariant='dark'
           is24Hour={false}
           display='default'
           onChange={handleChange}
