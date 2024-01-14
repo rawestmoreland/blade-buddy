@@ -42,7 +42,7 @@ export async function scheduleNotificationWithCategory(
   const notificationId = await Notifications.scheduleNotificationAsync({
     content: {
       title: "Hey! It's Blade Buddy!",
-      body: 'Did you shave today? Tap Yes or No below.',
+      body: 'Did you shave today?',
     },
     trigger: { hour, minute, repeats: true },
   });
