@@ -5,7 +5,7 @@ import DateTimePicker, {
 } from '@react-native-community/datetimepicker';
 import { Platform, StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
-import formatTime from '../lib/functions.js/formatTime';
+import formatTime from '../lib/functions/formatTime';
 import Colors from '../constants/Colors';
 
 export default function TimePicker({

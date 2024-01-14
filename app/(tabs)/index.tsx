@@ -1,12 +1,21 @@
+import { useEffect, useState } from 'react';
 import { Image, StyleSheet } from 'react-native';
 
-import { Text, View } from '../../components/Themed';
+import { View } from '../../components/Themed';
 import HomeScreenInfo from '../../components/HomeScreenInfo';
 import { useShaveData } from '../../contexts/ShaveDataContext';
 import Colors from '../../constants/Colors';
+import { getRandomImageName } from '../../lib/functions/getRandomImage';
+
+const images: { [key: string]: any } = {
+  'IMG_4611.png': require('../../assets/images/IMG_4611.png'),
+  'IMG_4612.png': require('../../assets/images/IMG_4612.png'),
+  'IMG_4613.png': require('../../assets/images/IMG_4613.png'),
+};
 
 export default function HomeScreen() {
   const { state: shaveData, updateShaveCount, resetShaveData } = useShaveData();
+  const [image, setImage] = useState<string | undefined>();
 
   const handleIncrementShaveCount = async () => {
     const newShaveCount = shaveData.shaveCount + 1;
@@ -17,12 +26,27 @@ export default function HomeScreen() {
     resetShaveData();
   };
 
+  useEffect(() => {
+    if (image) return;
+    const randoImage = getRandomImageName();
+    setImage(randoImage);
+  }, [image]);
+
+  if (!image) return null;
+
   return (
     <View style={styles.container}>
-      <Image
-        style={{ height: 200, width: 200, marginBottom: 16 }}
-        source={require('../../assets/images/LogoDarkSmiley.png')}
-      />
+      {image && (
+        <Image
+          style={{
+            height: 200,
+            width: 200,
+            borderRadius: 24,
+            marginBottom: 60,
+          }}
+          source={images[image] || images['IMG_4611.png']}
+        />
+      )}
       <HomeScreenInfo
         resetShaveData={handleResetShaveData}
         incrementShaveCount={handleIncrementShaveCount}

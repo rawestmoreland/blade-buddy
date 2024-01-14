@@ -26,9 +26,9 @@ export default function HomeScreenInfo({
           color={Colors.brand.lightBlue}
           style={{
             backgroundColor: 'white',
-            height: 10,
+            height: 30,
             width: 200,
-            borderRadius: 8,
+            borderRadius: 16,
             marginBottom: 16,
           }}
         />
@@ -45,21 +45,16 @@ export default function HomeScreenInfo({
           <IconButton
             aria-labelledby='shaved-button-text'
             icon='plus'
+            size={48}
             containerColor={Colors.brand.lightBlue}
             iconColor={Colors.brand.darkBlue}
             disabled={loading}
             mode='contained'
             onPress={incrementShaveCount}
           />
-          <Text
-            id='shaved-button-text'
-            style={pageStyle.text}
-            variant='labelMedium'
-          >
-            I Shaved
-          </Text>
         </View>
         <Button
+          mode='outlined'
           textColor={Colors.brand.lightBlue}
           disabled={loading}
           onPress={resetShaveData}
