@@ -2,7 +2,7 @@
   "expo": {
     "name": "Blade Buddy",
     "slug": "bladebuddy",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "orientation": "portrait",
     "icon": "./assets/images/LogoDark.png",
     "scheme": "myapp",
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/LogoDark.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.westmorelandcreative.bladebuddy"
