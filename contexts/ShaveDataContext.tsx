@@ -26,7 +26,6 @@ export interface ShaveDataState {
 const ShaveDataContext = createContext<{
   state: ShaveDataState;
   updateShaveCount: (count: number) => Promise<void>;
-  updateLastShaveDate: (date: string | null) => Promise<void>;
   updateShaveLimit: (limit: number) => Promise<void>;
   updateNotifications: (value: boolean) => Promise<void>;
   updateNotificationTime: (hour: number, minute: number) => Promise<void>;
@@ -44,7 +43,6 @@ const ShaveDataContext = createContext<{
     notificationTime: { hour: 9, minute: 0 },
   },
   updateShaveCount: (count: number) => new Promise(() => {}),
-  updateLastShaveDate: () => new Promise(() => {}),
   updateShaveLimit: () => new Promise(() => {}),
   updateNotifications: (value: boolean) => new Promise(() => {}),
   updateNotificationTime: (hour: number, minute: number) =>
@@ -83,17 +81,23 @@ export const ShaveDataProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const updateShaveCount = async (count: number) => {
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    };
+
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(now);
+
     const newState = {
       ...state,
       shaveCount: count,
-      lastShaveDate: new Date().toLocaleString('en-US'),
+      lastShaveDate: formattedDate,
     };
-    setState(newState);
-    await AsyncStorage.setItem('shaveData', JSON.stringify(newState));
-  };
-
-  const updateLastShaveDate = async (date: string | null) => {
-    const newState = { ...state, lastShaveDate: date };
     setState(newState);
     await AsyncStorage.setItem('shaveData', JSON.stringify(newState));
   };
@@ -155,7 +159,6 @@ export const ShaveDataProvider = ({ children }: { children: ReactNode }) => {
       value={{
         state,
         updateShaveCount,
-        updateLastShaveDate,
         updateShaveLimit,
         updateNotifications,
         updateNotificationTime,

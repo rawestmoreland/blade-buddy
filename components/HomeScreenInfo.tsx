@@ -32,7 +32,7 @@ export default function HomeScreenInfo({
             marginBottom: 16,
           }}
         />
-        {(shaveData?.shaveCount ?? 0) >= (shaveData?.shaveLimit ?? 0) && (
+        {(shaveData?.shaveCount ?? 0) >= (shaveData?.shaveLimit ?? 0) ? (
           <Text
             id='shave-progress-text'
             style={pageStyle.warningText}
@@ -40,7 +40,12 @@ export default function HomeScreenInfo({
           >
             You've reached your limit!
           </Text>
-        )}
+        ) : shaveData?.lastShaveDate ? (
+          <Text
+            id='last-shaved-text'
+            style={pageStyle.dateText}
+          >{`Last shave: ${shaveData.lastShaveDate}`}</Text>
+        ) : null}
         <View>
           <IconButton
             aria-labelledby='shaved-button-text'
@@ -84,8 +89,11 @@ const pageStyle = StyleSheet.create({
     alignItems: 'center',
   },
   warningText: {
-    color: 'red',
+    color: Colors.brand.lightBlue,
     fontWeight: '700',
+  },
+  dateText: {
+    color: Colors.brand.lightBlue,
   },
   buttonStyle: {
     backgroundColor: Colors.brand.lightBlue,
