@@ -11,6 +11,11 @@ import {
   requestPermissionsAsync,
   scheduleNotification,
 } from '../services/notificationService';
+import {
+  IosAuthorizationStatus,
+  getPermissionsAsync,
+} from 'expo-notifications';
+import { Platform } from 'react-native';
 
 // Define the shape of our state
 export interface ShaveDataState {
@@ -114,9 +119,15 @@ export const ShaveDataProvider = ({ children }: { children: ReactNode }) => {
     if (value === false) {
       await cancelAllScheduledNotificationsAsync();
     } else {
-      const canNotify: boolean = await requestPermissionsAsync();
+      const res = await getPermissionsAsync();
 
-      if (canNotify) {
+      const needsPrompt =
+        res.status !== 'granted' ||
+        (Platform.OS === 'ios' &&
+          (res.ios?.status === IosAuthorizationStatus.NOT_DETERMINED ||
+            res.ios?.status === IosAuthorizationStatus.DENIED));
+
+      if (!needsPrompt) {
         await scheduleNotification(
           state.notificationTime.hour,
           state.notificationTime.minute
